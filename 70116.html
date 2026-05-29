@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>植物根吸水力：雙色雷射實驗室</title>
+    <style>
+        body { font-family: "Microsoft JhengHei", sans-serif; background: #2c3e50; color: #ecf0f1; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .lab-container { display: grid; grid-template-columns: 300px 1fr; gap: 20px; width: 100%; max-width: 1000px; }
+        .inventory { background: #34495e; padding: 20px; border-radius: 10px; border: 2px solid #1abc9c; }
+        .workbench { background: #fff; color: #333; padding: 20px; border-radius: 10px; min-height: 400px; position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .item-btn { display: block; width: 100%; padding: 10px; margin-bottom: 10px; background: #16a085; color: white; border: none; border-radius: 5px; cursor: pointer; text-align: left; transition: 0.3s; }
+        .item-btn:hover { background: #1abc9c; transform: translateX(5px); }
+        .btn-green { border-left: 5px solid #2ecc71; }
+        .btn-purple { border-left: 5px solid #9b59b6; }
+        .status-box { margin-top: 20px; padding: 10px; background: #000; color: #0f0; font-family: monospace; height: 180px; overflow-y: auto; width: 100%; border-radius: 5px; border: 1px solid #666; }
+        .laser-beam { width: 200px; height: 4px; display: none; margin: 10px 0; border-radius: 2px; }
+        .highlight { font-weight: bold; color: #e67e22; }
+        #interference-pattern { width: 250px; height: 40px; border: 1px solid #ccc; display: none; margin-top: 10px; background: #000; }
+    </style>
+</head>
+<body>
+
+<h1>櫻桃蘿蔔實驗：雷射測量物件模擬</h1>
+
+<div class="lab-container">
+    <div class="inventory">
+        <h3>器材物件欄</h3>
+        <button class="item-btn" onclick="lab.prepareSample()">🌱 準備植物根樣本</button>
+        <button class="item-btn btn-green" onclick="lab.useLaser('green')">🔦 綠光雷射 (532nm)</button>
+        <button class="item-btn btn-purple" onclick="lab.useLaser('purple')">🔦 紫光/藍光雷射</button>
+        <button class="item-btn" onclick="lab.reset()">🔄 重置器材</button>
+    </div>
+
+    <div class="workbench" id="display">
+        <div id="visual-text">請先準備樣本，再選擇雷射光源</div>
+        <div id="laser-line" class="laser-beam"></div>
+        <div id="interference-pattern"></div>
+    </div>
+</div>
+
+<div class="status-box" id="log">系統訊息：實驗設備已連線...</div>
+
+<script>
+    const lab = {
+        hasSample: false,
+        
+        log(msg) {
+            const logBox = document.getElementById('log');
+            logBox.innerHTML += `<br>> ${msg}`;
+            logBox.scrollTop = logBox.scrollHeight;
+        },
+
+        prepareSample() {
+            this.hasSample = true;
+            document.getElementById('visual-text').innerHTML = "🌱 櫻桃蘿蔔的主根已架設於測量台。";
+            this.log("物件【植物樣本】已就位。準備進行衍射實驗。");
+        },
+
+        useLaser(color) {
+            if (!this.hasSample) return this.log("警告：尚未放置植物樣本！");
+            
+            const beam = document.getElementById('laser-line');
+            const pattern = document.getElementById('interference-pattern');
+            beam.style.display = 'block';
+            pattern.style.display = 'block';
+
+            if (color === 'green') {
+                beam.style.backgroundColor = '#2ecc71';
+                beam.style.boxShadow = '0 0 10px #2ecc71';
+                pattern.style.background = 'repeating-linear-gradient(90deg, #000, #000 5px, #2ecc71 7px, #2ecc71 12px, #000 14px)';
+                this.log("操作：開啟綠光雷射（波長 λ=532nm）。");
+                this.log("觀察：屏幕出現清晰且穩定的干涉條紋 [2]。");
+                this.log("結論：綠光效果良好，可精確測量亮紋間距 S 並求出根徑 d [1, 3]。");
+                document.getElementById('visual-text').innerHTML = "🔦 <span style='color:#27ae60'>綠光測量中</span>：亮紋清晰，數據有效。";
+            } else {
+                beam.style.backgroundColor = '#9b59b6';
+                beam.style.boxShadow = '0 0 10px #9b59b6';
+                pattern.style.background = 'repeating-linear-gradient(90deg, #000, #000 2px, #3d1a52 3px, #3d1a52 4px, #000 5px)';
+                this.log("操作：開啟紫光/藍光雷射。");
+                this.log("觀察：干涉條紋模糊，亮度不足，難以辨識亮紋中心 [1]。");
+                this.log("結論：最初嘗試使用藍光雷射筆，但效果較不好 [1]。");
+                document.getElementById('visual-text').innerHTML = "🔦 <span style='color:#8e44ad'>紫光/藍光測量中</span>：條紋模糊，測量困難。";
+            }
+        },
+
+        reset() {
+            this.hasSample = false;
+            document.getElementById('laser-line').style.display = 'none';
+            document.getElementById('interference-pattern').style.display = 'none';
+            document.getElementById('visual-text').innerHTML = "請先準備樣本，再選擇雷射光源";
+            this.log("系統已重置。");
+        }
+    };
+</script>
+</body>
+</html>
