@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>o711 倒水過程互動模擬</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f4; padding: 20px; }
+        .container { display: flex; justify-content: center; align-items: flex-end; height: 300px; gap: 50px; margin-top: 50px; }
+        .jug-container { display: flex; flex-direction: column; align-items: center; }
+        .jug { border: 4px solid #333; border-top: none; width: 100px; position: relative; background: #fff; border-radius: 0 0 15px 15px; overflow: hidden; }
+        .water { background-color: #3498db; position: absolute; bottom: 0; width: 100%; transition: height 0.6s ease-in-out; }
+        .label { margin-top: 10px; font-weight: bold; }
+        .controls { margin-top: 30px; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; background-color: #2ecc71; color: white; border: none; border-radius: 5px; }
+        button:hover { background-color: #27ae60; }
+        #log { margin-top: 20px; text-align: left; max-width: 400px; margin-left: auto; margin-right: auto; background: white; padding: 10px; border-radius: 5px; height: 150px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <h1>倒水問題互動模擬器 (o711)</h1>
+    <p>模擬 A 水杯 (5L) 與 B 水杯 (3L) 的互動過程</p>
+
+    <div class="container">
+        <div class="jug-container">
+            <div id="jugA" class="jug" style="height: 200px;"><div id="wA" class="water" style="height: 0%;"></div></div>
+            <div class="label">水杯 A (5L) <br> <span id="txtA">0</span> L</div>
+        </div>
+        <div class="jug-container">
+            <div id="jugB" class="jug" style="height: 120px;"><div id="wB" class="water" style="height: 0%;"></div></div>
+            <div class="label">水杯 B (3L) <br> <span id="txtB">0</span> L</div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button onclick="fill(0)">加滿 A</button>
+        <button onclick="fill(1)">加滿 B</button>
+        <button onclick="pour(0, 1)">A 倒向 B</button>
+        <button onclick="pour(1, 0)">B 倒向 A</button>
+        <button onclick="empty(0)">排空 A</button>
+        <button onclick="empty(1)">排空 B</button>
+    </div>
+
+    <div id="log"><strong>操作紀錄：</strong><br></div>
+
+    <script>
+        let cap = ;
+        let curr = ;
+        const logEl = document.getElementById('log');
+
+        function updateUI() {
+            document.getElementById('wA').style.height = (curr / cap * 100) + '%';
+            document.getElementById('wB').style.height = (curr[1] / cap[1] * 100) + '%';
+            document.getElementById('txtA').innerText = curr;
+            document.getElementById('txtB').innerText = curr[1];
+        }
+
+        function addLog(msg) {
+            logEl.innerHTML += msg + "<br>";
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+
+        function fill(i) {
+            curr[i] = cap[i];
+            addLog(`加滿了水杯 ${i === 0 ? 'A' : 'B'}`);
+            updateUI();
+        }
+
+        function empty(i) {
+            curr[i] = 0;
+            addLog(`排空了水杯 ${i === 0 ? 'A' : 'B'}`);
+            updateUI();
+        }
+
+        function pour(from, to) {
+            let amount = Math.min(curr[from], cap[to] - curr[to]);
+            curr[from] -= amount;
+            curr[to] += amount;
+            addLog(`從 ${from === 0 ? 'A 倒向 B' : 'B 倒向 A'}：${amount} L`);
+            updateUI();
+        }
+    </script>
+</body>
+</html>
