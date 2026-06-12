@@ -2,28 +2,99 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<title>1A2B 猜數字</title>
+<title>☁️ 大耳狗 1A2B</title>
+
 <style>
-  body { font-family: Arial; text-align: center; }
-  input, button { font-size: 18px; margin: 5px; }
+body {
+  font-family: "Arial";
+  text-align: center;
+  background: linear-gradient(to bottom, #dff6ff, #ffffff);
+  color: #6bb7e8;
+}
+
+h1 {
+  font-size: 42px;
+  margin-top: 20px;
+}
+
+.container {
+  background: white;
+  width: 320px;
+  margin: auto;
+  padding: 20px;
+  border-radius: 25px;
+  box-shadow: 0 10px 20px rgba(150,200,255,0.3);
+}
+
+input {
+  font-size: 20px;
+  padding: 8px;
+  border-radius: 15px;
+  border: 2px solid #cceeff;
+  width: 150px;
+  text-align: center;
+}
+
+button {
+  font-size: 18px;
+  padding: 8px 15px;
+  border-radius: 20px;
+  border: none;
+  background: #aee1f9;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #7ec8f5;
+  transform: scale(1.05);
+}
+
+ul {
+  text-align: left;
+  padding-left: 20px;
+}
+
+.cinna {
+  width: 140px;
+  margin: 10px;
+}
+
+.bubble {
+  background: #f0fbff;
+  border-radius: 15px;
+  padding: 10px;
+  margin-top: 10px;
+}
 </style>
 </head>
+
 <body>
 
-<h1>🎮 1A2B 猜數字</h1>
+<h1>☁️ Cinnamoroll 1A2B 🐶</h1>
 
-<input id="guess" maxlength="4" placeholder="輸入4位數字">
-<button onclick="check()">猜！</button>
-<button onclick="restart()">重新開始</button>
+<img class="cinna" src="https://upload.wikimedia.org/wikipedia/en/3/3a/Cinnamoroll.png">
+
+<div class="container">
+
+<div class="bubble">💭 猜猜看大耳狗藏的數字吧～</div>
+
+<input id="guess" maxlength="4" placeholder="輸入4位數"><br><br>
+
+<button onclick="check()">🐾 猜一下</button>
+<button onclick="restart()">🔄 重來</button>
 
 <p id="result"></p>
 <ul id="history"></ul>
+
+</div>
 
 <script>
 let answer = generate();
 let count = 0;
 
-// 產生不重複4位數
+// 產生不重複數字
 function generate() {
   let nums = [];
   while (nums.length < 4) {
@@ -36,7 +107,11 @@ function generate() {
 // 檢查答案
 function check() {
   let guess = document.getElementById("guess").value;
-  if (guess.length != 4) return alert("請輸入4位數");
+
+  if (guess.length != 4) {
+    alert("要輸入4位數字喔！");
+    return;
+  }
 
   let A = 0, B = 0;
 
@@ -48,16 +123,16 @@ function check() {
   count++;
 
   let li = document.createElement("li");
-  li.textContent = `第${count}次：${guess} ➜ ${A}A${B}B`;
+  li.textContent = `🐾 第${count}次：${guess} ➜ ${A}A${B}B`;
   document.getElementById("history").appendChild(li);
 
   if (A === 4) {
     document.getElementById("result").innerHTML =
-      `🎉 恭喜答對！共猜 ${count} 次`;
+      `🎉 Cinnamoroll：太厲害了！你只用了 ${count} 次就成功了！`;
   }
 }
 
-// 重開
+// 重來
 function restart() {
   answer = generate();
   count = 0;
@@ -68,4 +143,3 @@ function restart() {
 
 </body>
 </html>
-
